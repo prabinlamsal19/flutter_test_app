@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter_app/base/app_color.dart';
-import 'package:test_flutter_app/base/colors.dart';
+import 'package:test_flutter_app/base/theme_settings/app_color.dart';
+import 'package:test_flutter_app/base/theme_settings/colors.dart';
 
 extension ColorX on BuildContext {
   /// current light/dark color as per theme mode and config
@@ -26,4 +26,8 @@ extension AppColorX on Color {
       opacity,
     );
   }
+}
+
+extension TextX on BuildContext {
+  TextTheme get text => Theme.of(this).textTheme;
 }

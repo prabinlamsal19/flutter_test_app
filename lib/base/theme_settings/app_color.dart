@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:test_flutter_app/base/colors.dart';
+import 'package:test_flutter_app/base/theme_settings/colors.dart';
 
 class AppColor extends InheritedWidget {
   const AppColor({

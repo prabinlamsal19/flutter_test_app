@@ -40,3 +40,8 @@ final dMargin5075 = dMargin1.times(5.75);
 final dMargin6 = dMargin1.times(6);
 
 final dBorderRadius = 8.r;
+
+//login page
+final dTextfieldHeight = 75.h;
+final dLoginContainerHeightDesktop = 572.h;
+final dLoginContainerWidthDesktop = 802.w;

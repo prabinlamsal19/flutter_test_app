@@ -12,8 +12,13 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
-  adaptive_sizer: ^0.0.4
   google_fonts: ^6.2.1
+  flutter_hooks: ^0.20.5
+  adaptive_sizer:
+    git:
+      url: https://github.com/kishormainali/adaptive_sizer
+
+
 
 dev_dependencies:
   flutter_test:
