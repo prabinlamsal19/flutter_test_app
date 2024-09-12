@@ -119,13 +119,15 @@ class LoginPage extends HookWidget {
 }
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({super.key, this.isTextObscure = false, this.prefixIcon = const SizedBox.shrink()});
+  const AppTextField({super.key, this.isTextObscure = false, this.prefixIcon = const SizedBox.shrink(), this.onChanged});
   final bool isTextObscure;
   final Widget prefixIcon;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: onChanged,
       obscureText: isTextObscure,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,

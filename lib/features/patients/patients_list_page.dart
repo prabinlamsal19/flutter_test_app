@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:test_flutter_app/base/components/gaps/gaps.dart';
 import 'package:test_flutter_app/base/extension/extensions.dart';
 import 'package:test_flutter_app/features/login/login_page.dart';
 import 'package:test_flutter_app/features/patients/models/patient_model.dart';
 import 'package:test_flutter_app/features/patients/repository/patient_list.dart';
 
-class PatientsListPage extends StatelessWidget {
+class PatientsListPage extends HookWidget {
   const PatientsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final myPatientsList = useState<List>(patientList);
+
     return Scaffold(
       backgroundColor: context.color.elevatedBackground,
       body: Padding(
@@ -26,10 +28,16 @@ class PatientsListPage extends StatelessWidget {
               height: 50,
               child: Row(
                 children: [
-                  const SizedBox(
+                  SizedBox(
                       width: 127,
                       child: AppTextField(
-                        prefixIcon: Icon(Icons.search),
+                        onChanged: (currentVal) {
+                          myPatientsList.value = patientList.where((patientJson) {
+                            final patientName = patientJson["name"] as String;
+                            return patientName.contains(currentVal);
+                          }).toList();
+                        },
+                        prefixIcon: const Icon(Icons.search),
                       )),
                   HorizontalGap(dMargin2),
                   const SizedBox(
@@ -58,7 +66,17 @@ class PatientsListPage extends StatelessWidget {
                 ],
               ),
             ),
-            ...patientList.map((patientModel) => _PatientCard(patientModel: PatientModel.fromJson(patientModel)))
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...myPatientsList.value.map(
+                      (patientModel) => _PatientCard(patientModel: PatientModel.fromJson(patientModel)),
+                    )
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -73,6 +91,7 @@ class _PatientCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        margin: EdgeInsets.all(dMargin2),
         padding: EdgeInsets.all(dMargin1),
         decoration: BoxDecoration(
           color: context.color.scaffoldBackground,
@@ -82,9 +101,10 @@ class _PatientCard extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: dMargin2),
-              child: const Icon(Icons.person_rounded),
+              child: Image.asset('assets/man_png.png'),
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   patientModel.name ?? '',
@@ -93,10 +113,6 @@ class _PatientCard extends StatelessWidget {
                 VerticalGap(dMargin1),
                 Container(
                   padding: EdgeInsets.all(dMargin1),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(dBorderRadius),
-                  ),
                   child: Row(
                     children: [
                       Column(
@@ -118,13 +134,40 @@ class _PatientCard extends StatelessWidget {
                           Text(patientModel.wardNumber.toString()),
                         ],
                       ),
+                      HorizontalGap(dMargin3),
+                      _ColoredInfoBox(color: context.color.green, text: '${patientModel.oxygenPercent} %'),
+                      HorizontalGap(dMargin2),
+                      _ColoredInfoBox(
+                          color: context.color.red,
+                          text: '${patientModel.bloodPressureSystolic}/${patientModel.bloodPressureDiastolic}'),
+                      HorizontalGap(dMargin2),
+                      _ColoredInfoBox(color: context.color.yellow, text: '${patientModel.heartRate} bpm'),
                     ],
                   ),
                 ),
-                HorizontalGap(dMargin3),
               ],
             )
           ],
         ));
+  }
+}
+
+class _ColoredInfoBox extends StatelessWidget {
+  const _ColoredInfoBox({super.key, required this.color, required this.text});
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(dMargin1),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(dBorderRadius),
+          border: Border.all(width: dMargin05, color: color),
+          color: color.withOpacity(0.51)),
+      child: Center(
+        child: Text(text),
+      ),
+    );
   }
 }
