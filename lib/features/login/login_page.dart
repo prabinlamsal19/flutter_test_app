@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:test_flutter_app/base/components/components.dart';
 import 'package:test_flutter_app/base/extension/extensions.dart';
+import 'package:test_flutter_app/features/patients/patients_list_page.dart';
 
 class LoginPage extends HookWidget {
   const LoginPage({super.key});
@@ -13,28 +14,35 @@ class LoginPage extends HookWidget {
       child: Column(
         children: [
           const Spacer(),
-          Text('Welcome Back', style: context.text.headlineLarge),
+          Text('Welcome Back !', style: context.text.bodyLarge?.copyWith(fontSize: 90)),
           VerticalGap(dMargin1),
           Text('Login to continue', style: context.text.bodySmall),
           VerticalGap(dMargin1),
           Container(
             height: dLoginContainerHeightDesktop,
             width: dLoginContainerWidthDesktop,
-            padding: EdgeInsets.symmetric(vertical: dMargin2, horizontal: dMargin5),
+            padding: EdgeInsets.only(bottom: dMargin2, top: dMargin5, left: dMargin5, right: dMargin5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(dBorderRadius),
               color: context.color.elevatedBackground,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Username'),
+                const Row(
+                  children: [Text('Username'), Spacer()],
+                ),
                 VerticalGap(dMargin05),
-                SizedBox(height: dTextfieldHeight, child: const TextField()),
+                SizedBox(height: dTextfieldHeight, child: const AppTextField()),
                 VerticalGap(dMargin2),
-                const Text('Username'),
+                const Row(
+                  children: [Text('Password'), Spacer()],
+                ),
                 VerticalGap(dMargin05),
-                SizedBox(height: dTextfieldHeight, child: const TextField()),
+                SizedBox(
+                    height: dTextfieldHeight,
+                    child: const AppTextField(
+                      isTextObscure: true,
+                    )),
                 VerticalGap(dMargin2),
                 Row(
                   children: [
@@ -45,6 +53,7 @@ class LoginPage extends HookWidget {
                       },
                     ),
                     HorizontalGap(dMargin05),
+                    Text('Remember me', style: context.text.bodyMedium),
                     const Spacer(),
                     Text(
                       'Forgot Password',
@@ -55,16 +64,17 @@ class LoginPage extends HookWidget {
                 VerticalGap(dMargin1),
                 Row(
                   children: [
-                    const Divider(),
-                    Text('OR', style: context.text.bodyLarge),
-                    const Divider(),
+                    const Expanded(child: Divider()),
+                    Text('  OR  ', style: context.text.bodyLarge),
+                    const Expanded(child: Divider()),
                   ],
                 ),
-                VerticalGap(dMargin2),
+                VerticalGap(dMargin3),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(),
-                    color: context.color.primary,
+                    border: Border.all(
+                      color: context.color.primary,
+                    ),
                     borderRadius: BorderRadius.circular(dBorderRadius),
                   ),
                   padding: EdgeInsets.all(dMargin05),
@@ -72,23 +82,26 @@ class LoginPage extends HookWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.facebook),
+                      HorizontalGap(dMargin1),
                       Text(
-                        'Sign In Using Google',
+                        'Sign In Using Facebook',
                         style: context.text.titleSmall,
                       ),
                     ],
                   ),
                 ),
-                VerticalGap(dMargin1),
+                VerticalGap(dMargin2),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PatientsListPage()));
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(),
                       color: context.color.primary,
                       borderRadius: BorderRadius.circular(dBorderRadius),
                     ),
-                    padding: EdgeInsets.all(dMargin05),
+                    padding: EdgeInsets.symmetric(vertical: dMargin05, horizontal: dMargin2),
                     child: Text(
                       'Sign In',
                       style: context.text.titleSmall,
@@ -100,6 +113,27 @@ class LoginPage extends HookWidget {
           ),
           const Spacer(),
         ],
+      ),
+    );
+  }
+}
+
+class AppTextField extends StatelessWidget {
+  const AppTextField({super.key, this.isTextObscure = false, this.prefixIcon = const SizedBox.shrink()});
+  final bool isTextObscure;
+  final Widget prefixIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      obscureText: isTextObscure,
+      decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        filled: true,
+        fillColor: context.color.scaffoldBackground,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: context.color.scaffoldBackground, width: 0.0),
+        ),
       ),
     );
   }

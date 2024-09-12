@@ -17,6 +17,7 @@ dependencies:
   adaptive_sizer:
     git:
       url: https://github.com/kishormainali/adaptive_sizer
+  flutter_svg: ^2.0.10+1
 
 
 
